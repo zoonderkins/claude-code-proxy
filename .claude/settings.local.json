@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__resolve-library-id",
+      "mcp__augment-lite__index_status",
+      "Bash(python -c:*)",
+      "Bash(OPENAI_API_KEY=test-key REQUESTY_AUTO_CACHE=true python:*)",
+      "Bash(timeout 5 python:*)",
+      "mcp__augment-lite__index_rebuild",
+      "mcp__augment-lite__task_list"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

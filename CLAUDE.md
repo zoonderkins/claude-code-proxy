@@ -103,12 +103,43 @@ The application uses a comprehensive environment-based configuration system:
 **Custom Headers:**
 - `CUSTOM_HEADER_*` - Automatically injected headers (e.g., CUSTOM_HEADER_ACCEPT)
 
+**Requesty Auto Cache:**
+- `REQUESTY_AUTO_CACHE` - Enable automatic request caching (default: false)
+- `REQUESTY_API_KEY` - Optional Requesty API key for enhanced features
+
 ### Custom Header Injection
 Environment variables with `CUSTOM_HEADER_` prefix are converted to HTTP headers:
 ```bash
 CUSTOM_HEADER_ACCEPT="application/jsonstream" → Accept header
 CUSTOM_HEADER_X_API_KEY="token" → X-API-Key header
 ```
+
+### Requesty Auto Cache Integration
+The proxy supports automatic caching through Requesty AI to improve performance and reduce costs:
+
+**Enable Auto Cache:**
+```bash
+REQUESTY_AUTO_CACHE=true
+```
+
+**Complete Requesty Setup:**
+```bash
+OPENAI_BASE_URL="https://router.requesty.ai/v1"
+OPENAI_API_KEY="your-requesty-api-key"
+REQUESTY_AUTO_CACHE=true
+```
+
+When enabled, all requests automatically include the `requesty.auto_cache` flag, enabling:
+- ✅ Automatic response caching
+- ✅ Faster subsequent requests
+- ✅ Reduced API costs
+- ✅ No code changes required
+
+**Example Request Flow:**
+1. Client sends request to proxy
+2. Proxy automatically adds `"requesty": {"auto_cache": true}`
+3. Requesty AI caches the response
+4. Future identical requests return cached results instantly
 
 ## Key Development Patterns
 
@@ -150,6 +181,17 @@ AZURE_API_VERSION="2024-03-01-preview"
 OPENAI_API_KEY="dummy-key"
 OPENAI_BASE_URL="http://localhost:11434/v1"
 BIG_MODEL="llama3.1:70b"
+```
+
+### Requesty AI with Auto Cache
+```bash
+# Complete setup with automatic caching
+OPENAI_API_KEY="your-requesty-api-key"
+OPENAI_BASE_URL="https://router.requesty.ai/v1"
+REQUESTY_AUTO_CACHE=true
+BIG_MODEL="minimaxi/MiniMax-M2"
+MIDDLE_MODEL="minimaxi/MiniMax-M2"
+SMALL_MODEL="minimaxi/MiniMax-M2"
 ```
 
 ## Usage with Claude Code

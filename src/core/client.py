@@ -43,17 +43,25 @@ class OpenAIClient:
     
     async def create_chat_completion(self, request: Dict[str, Any], request_id: Optional[str] = None) -> Dict[str, Any]:
         """Send chat completion to OpenAI API with cancellation support."""
-        
+
         # Create cancellation token if request_id provided
         if request_id:
             cancel_event = asyncio.Event()
             self.active_requests[request_id] = cancel_event
-        
+
         try:
+            # Extract extra_body parameters if present
+            extra_body = request.pop("extra_body", None)
+
             # Create task that can be cancelled
-            completion_task = asyncio.create_task(
-                self.client.chat.completions.create(**request)
-            )
+            if extra_body:
+                completion_task = asyncio.create_task(
+                    self.client.chat.completions.create(**request, extra_body=extra_body)
+                )
+            else:
+                completion_task = asyncio.create_task(
+                    self.client.chat.completions.create(**request)
+                )
             
             if request_id:
                 # Wait for either completion or cancellation
@@ -102,21 +110,27 @@ class OpenAIClient:
     
     async def create_chat_completion_stream(self, request: Dict[str, Any], request_id: Optional[str] = None) -> AsyncGenerator[str, None]:
         """Send streaming chat completion to OpenAI API with cancellation support."""
-        
+
         # Create cancellation token if request_id provided
         if request_id:
             cancel_event = asyncio.Event()
             self.active_requests[request_id] = cancel_event
-        
+
         try:
             # Ensure stream is enabled
             request["stream"] = True
             if "stream_options" not in request:
                 request["stream_options"] = {}
             request["stream_options"]["include_usage"] = True
-            
+
+            # Extract extra_body parameters if present
+            extra_body = request.pop("extra_body", None)
+
             # Create the streaming completion
-            streaming_completion = await self.client.chat.completions.create(**request)
+            if extra_body:
+                streaming_completion = await self.client.chat.completions.create(**request, extra_body=extra_body)
+            else:
+                streaming_completion = await self.client.chat.completions.create(**request)
             
             async for chunk in streaming_completion:
                 # Check for cancellation before yielding each chunk

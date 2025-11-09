@@ -29,6 +29,10 @@ class Config:
         self.big_model = os.environ.get("BIG_MODEL", "gpt-4o")
         self.middle_model = os.environ.get("MIDDLE_MODEL", self.big_model)
         self.small_model = os.environ.get("SMALL_MODEL", "gpt-4o-mini")
+
+        # Requesty Auto Cache configuration
+        self.requesty_auto_cache = os.environ.get("REQUESTY_AUTO_CACHE", "false").lower() in ("true", "1", "yes", "on")
+        self.requesty_api_key = os.environ.get("REQUESTY_API_KEY")  # Optional: for enhanced features
         
     def validate_api_key(self):
         """Basic API key validation"""

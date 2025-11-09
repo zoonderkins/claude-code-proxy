@@ -64,6 +64,15 @@ async def create_message(request: ClaudeMessagesRequest, http_request: Request, 
         # Convert Claude request to OpenAI format
         openai_request = convert_claude_to_openai(request, model_manager)
 
+        # Add Requesty auto_cache if enabled
+        if config.requesty_auto_cache and "extra_body" not in openai_request:
+            openai_request["extra_body"] = {
+                "requesty": {
+                    "auto_cache": True
+                }
+            }
+            logger.debug("Added auto_cache to requesty configuration")
+
         # Check if client disconnected before processing
         if await http_request.is_disconnected():
             raise HTTPException(status_code=499, detail="Client disconnected")
@@ -145,6 +154,15 @@ async def create_chat_completion(request: OpenAIChatCompletionRequest, http_requ
         if mapped_model != request.model:
             openai_request["model"] = mapped_model
             logger.debug(f"Mapped model {request.model} -> {mapped_model}")
+
+        # Add Requesty auto_cache if enabled (and not already set)
+        if config.requesty_auto_cache and "extra_body" not in openai_request:
+            openai_request["extra_body"] = {
+                "requesty": {
+                    "auto_cache": True
+                }
+            }
+            logger.debug("Added auto_cache to requesty configuration")
 
         # Check if client disconnected before processing
         if await http_request.is_disconnected():
@@ -254,6 +272,10 @@ async def health_check():
             "api_key_valid": config.validate_api_key(),
             "client_api_key_validation": bool(config.anthropic_api_key),
             "openai_base_url": config.openai_base_url,
+        },
+        "requesty": {
+            "auto_cache_enabled": config.requesty_auto_cache,
+            "requesty_api_key_configured": bool(config.requesty_api_key),
         },
     }
 
