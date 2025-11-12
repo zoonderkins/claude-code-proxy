@@ -14,7 +14,7 @@ async def test_basic_chat():
         response = await client.post(
             "http://localhost:8082/v1/messages",
             json={
-                "model": "claude-3-5-sonnet-20241022",
+                "model": "anthropic/claude-haiku-4-5",
                 "max_tokens": 100,
                 "messages": [
                     {"role": "user", "content": "Hello, how are you?"}
@@ -33,7 +33,7 @@ async def test_streaming_chat():
             "POST",
             "http://localhost:8082/v1/messages",
             json={
-                "model": "claude-3-5-haiku-20241022",
+                "model": "anthropic/claude-haiku-4-5",
                 "max_tokens": 150,
                 "messages": [
                     {"role": "user", "content": "Tell me a short joke"}
@@ -53,7 +53,7 @@ async def test_function_calling():
         response = await client.post(
             "http://localhost:8082/v1/messages",
             json={
-                "model": "claude-3-5-sonnet-20241022",
+                "model": "anthropic/claude-haiku-4-5",
                 "max_tokens": 200,
                 "messages": [
                     {"role": "user", "content": "What's the weather like in New York? Please use the weather function."}
@@ -93,7 +93,7 @@ async def test_with_system_message():
         response = await client.post(
             "http://localhost:8082/v1/messages",
             json={
-                "model": "claude-3-5-sonnet-20241022",
+                "model": "anthropic/claude-haiku-4-5",
                 "max_tokens": 100,
                 "system": "You are a helpful assistant that always responds in haiku format.",
                 "messages": [
@@ -115,7 +115,7 @@ async def test_multimodal():
         response = await client.post(
             "http://localhost:8082/v1/messages",
             json={
-                "model": "claude-3-5-sonnet-20241022",
+                "model": "anthropic/claude-haiku-4-5",
                 "max_tokens": 100,
                 "messages": [
                     {
@@ -147,7 +147,7 @@ async def test_conversation_with_tool_use():
         response1 = await client.post(
             "http://localhost:8082/v1/messages",
             json={
-                "model": "claude-3-5-sonnet-20241022",
+                "model": "anthropic/claude-haiku-4-5",
                 "max_tokens": 200,
                 "messages": [
                     {"role": "user", "content": "Calculate 25 * 4 using the calculator tool"}
@@ -185,7 +185,7 @@ async def test_conversation_with_tool_use():
                 response2 = await client.post(
                     "http://localhost:8082/v1/messages",
                     json={
-                        "model": "claude-3-5-sonnet-20241022",
+                        "model": "anthropic/claude-haiku-4-5",
                         "max_tokens": 100,
                         "messages": [
                             {"role": "user", "content": "Calculate 25 * 4 using the calculator tool"},
@@ -214,7 +214,7 @@ async def test_token_counting():
         response = await client.post(
             "http://localhost:8082/v1/messages/count_tokens",
             json={
-                "model": "claude-3-5-sonnet-20241022",
+                "model": "anthropic/claude-haiku-4-5",
                 "messages": [
                     {"role": "user", "content": "This is a test message for token counting."}
                 ]

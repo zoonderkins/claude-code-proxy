@@ -20,7 +20,7 @@ async def test_non_streaming_cancellation():
                 client.post(
                     "http://localhost:8082/v1/messages",
                     json={
-                        "model": "claude-3-5-sonnet-20241022",
+                        "model": "anthropic/claude-haiku-4-5",
                         "max_tokens": 1000,
                         "messages": [
                             {"role": "user", "content": "Write a very long story about a journey through space that takes at least 500 words."}
@@ -53,7 +53,7 @@ async def test_streaming_cancellation():
                 "POST",
                 "http://localhost:8082/v1/messages",
                 json={
-                    "model": "claude-3-5-sonnet-20241022",
+                    "model": "anthropic/claude-haiku-4-5",
                     "max_tokens": 1000,
                     "messages": [
                         {"role": "user", "content": "Write a very long story about a journey through space that takes at least 500 words."}

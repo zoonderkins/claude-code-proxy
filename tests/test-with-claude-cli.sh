@@ -9,7 +9,7 @@ echo ""
 # 設置環境變數
 export ANTHROPIC_BASE_URL=http://localhost:8090
 export ANTHROPIC_API_KEY=dummy
-export ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
+export ANTHROPIC_MODEL=anthropic/claude-haiku-4-5
 
 echo "📝 環境變數設置："
 echo "   ANTHROPIC_BASE_URL: $ANTHROPIC_BASE_URL"

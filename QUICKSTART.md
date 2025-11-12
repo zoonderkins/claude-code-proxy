@@ -4,7 +4,7 @@
 
 ## 📋 系統需求
 
-- **Python**: 3.9 或更高版本（支援 3.9, 3.10, 3.11, 3.12, 3.13）
+- **Python**: 3.12 或更高版本（支援 3.12, 3.13）
 - **套件管理器**: UV（推薦）或 pip
 - **Requesty.ai API 金鑰**: 取得自 [Requesty.ai](https://requesty.ai)
 
@@ -246,7 +246,7 @@ curl -X POST http://localhost:8082/v1/messages \
   -H "x-api-key: dummy" \
   -H "anthropic-version: 2023-06-01" \
   -d '{
-    "model": "claude-3-5-sonnet-20241022",
+    "model": "anthropic/claude-haiku-4-5",
     "max_tokens": 100,
     "messages": [{"role": "user", "content": "你好"}]
   }'
