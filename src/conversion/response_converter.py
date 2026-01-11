@@ -21,6 +21,14 @@ def convert_openai_to_claude_response(
     # Build Claude content blocks
     content_blocks = []
 
+    # Add thinking content (2026 spec - from GLM-4.7 reasoning_content or thinking field)
+    thinking_content = message.get("reasoning_content") or message.get("thinking")
+    if thinking_content:
+        content_blocks.append({
+            "type": Constants.CONTENT_THINKING,
+            "thinking": thinking_content
+        })
+
     # Add text content
     text_content = message.get("content")
     if text_content is not None:
@@ -120,6 +128,11 @@ async def convert_openai_streaming_to_claude(
                     choice = choices[0]
                     delta = choice.get("delta", {})
                     finish_reason = choice.get("finish_reason")
+
+                    # Handle reasoning/thinking delta (2026 spec - GLM-4.7)
+                    reasoning_content = delta.get("reasoning_content") or delta.get("thinking")
+                    if reasoning_content:
+                        yield f"event: {Constants.EVENT_CONTENT_BLOCK_DELTA}\ndata: {json.dumps({'type': Constants.EVENT_CONTENT_BLOCK_DELTA, 'index': text_block_index, 'delta': {'type': Constants.DELTA_THINKING, 'thinking': reasoning_content}}, ensure_ascii=False)}\n\n"
 
                     # Handle text delta
                     if delta and "content" in delta and delta["content"] is not None:
@@ -279,6 +292,11 @@ async def convert_openai_streaming_to_claude_with_cancellation(
                     choice = choices[0]
                     delta = choice.get("delta", {})
                     finish_reason = choice.get("finish_reason")
+
+                    # Handle reasoning/thinking delta (2026 spec - GLM-4.7)
+                    reasoning_content = delta.get("reasoning_content") or delta.get("thinking")
+                    if reasoning_content:
+                        yield f"event: {Constants.EVENT_CONTENT_BLOCK_DELTA}\ndata: {json.dumps({'type': Constants.EVENT_CONTENT_BLOCK_DELTA, 'index': text_block_index, 'delta': {'type': Constants.DELTA_THINKING, 'thinking': reasoning_content}}, ensure_ascii=False)}\n\n"
 
                     # Handle text delta
                     if delta and "content" in delta and delta["content"] is not None:

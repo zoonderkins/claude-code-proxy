@@ -15,6 +15,13 @@ class ModelManager:
             claude_model.startswith("deepseek-")):
             return claude_model
 
+        # 2026 providers - passthrough for GLM, MiniMax, Gemini models
+        model_lower = claude_model.lower()
+        if (model_lower.startswith("glm-") or model_lower.startswith("glm4") or
+            model_lower.startswith("minimax") or
+            model_lower.startswith("gemini")):
+            return claude_model
+
         # Map based on model naming patterns
         model_lower = claude_model.lower()
         if 'haiku' in model_lower:

@@ -126,6 +126,20 @@ def convert_claude_to_openai(
         else:
             openai_request["tool_choice"] = "auto"
 
+    # Convert thinking mode (2026 spec - for GLM-4.7, MiniMax, and compatible providers)
+    if claude_request.thinking:
+        thinking_config = {}
+        if hasattr(claude_request.thinking, 'type'):
+            thinking_config["type"] = claude_request.thinking.type
+        if hasattr(claude_request.thinking, 'budget_tokens') and claude_request.thinking.budget_tokens:
+            thinking_config["budget_tokens"] = claude_request.thinking.budget_tokens
+        if thinking_config:
+            # Add to extra_body for providers that support it (GLM-4.7, etc.)
+            if "extra_body" not in openai_request:
+                openai_request["extra_body"] = {}
+            openai_request["extra_body"]["thinking"] = thinking_config
+            logger.debug(f"Added thinking config: {thinking_config}")
+
     return openai_request
 
 

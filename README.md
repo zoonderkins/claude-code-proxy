@@ -351,16 +351,21 @@ curl -X POST http://localhost:8082/v1/messages \
   }'
 ```
 
-## 📋 Requesty.ai Model Routing Table
+## 📋 Requesty.ai Model Routing Table (2026)
 
 All proxies use Requesty.ai as the unified router, actual model format:
 
-| Service Name | Port | Requesty.ai Model Path | Environment Config |
-|-------------|------|------------------------|-------------------|
-| Kimi-K2 | 8081 | `groq/moonshotai/Kimi-K2-Instruct-0905` | .env-requesty-kimi-k2 |
-| GLM-4.6 | 8082 | `zai/GLM-4.6` | .env-requesty-glm |
-| MiniMax-M2 | 8083 | `minimaxi/MiniMax-M2` | .env-requesty-minimax-m2 |
-| Gemini 2.5 | 8084 | `google/gemini-2.5-flash` | .env-requesty-gemini |
+| Service Name | Port | Requesty.ai Model Path | Context/Output | Environment Config |
+|-------------|------|------------------------|----------------|-------------------|
+| GLM-4.7 | 8082 | `zai/GLM-4.7` | 200K/128K | .env-requesty-glm |
+| MiniMax-M2.1 | 8083 | `minimaxi/MiniMax-M2.1` | 204K/- | .env-requesty-minimax-m2 |
+| Gemini 3 Pro | 8084 | `google/gemini-3-pro-preview` | 1M/64K | .env-requesty-gemini |
+| Kimi-K2 | 8081 | `groq/moonshotai/Kimi-K2-Instruct-0905` | 128K/- | .env-requesty-kimi-k2 |
+
+**2026 Provider Highlights:**
+- **GLM-4.7**: 128K output, thinking mode, MCP support - use Coding API (`/api/coding/paas/v4`)
+- **MiniMax-M2.1**: 204K context, OpenAI-compatible API, agent-native
+- **Gemini 3 Pro**: 1M context window, 64K output, multimodal (preview)
 
 **Note:** All proxies use the same Requesty.ai API key - only need to configure once.
 
@@ -387,10 +392,10 @@ All proxies use Requesty.ai as the unified router, actual model format:
 
 ```bash
 # View real-time logs
-tail -f logs/GLM-4.6.log
+tail -f logs/GLM-4.7.log
 tail -f logs/Kimi-K2.log
-tail -f logs/MiniMax-M2.log
-tail -f logs/Gemini-2.5-Flash.log
+tail -f logs/MiniMax-M2.1.log
+tail -f logs/Gemini-3-Pro.log
 
 # View all proxy logs
 tail -f logs/*.log
@@ -417,19 +422,19 @@ CUSTOM_HEADER_ACCEPT="application/json"
 
 Ensure each proxy uses different ports to avoid conflicts:
 - Kimi-K2: 8081
-- GLM-4.6: 8082
-- MiniMax-M2: 8083
-- Gemini 2.5: 8084
+- GLM-4.7: 8082
+- MiniMax-M2.1: 8083
+- Gemini 3 Pro: 8084
 
 ## 🔗 Requesty.ai Model Format
 
 Requesty.ai uses special model path format: `provider/vendor/model-name`
 
 Examples:
+- `zai/GLM-4.7` - Zhipu AI's GLM-4.7 (200K context, 128K output)
+- `minimaxi/MiniMax-M2.1` - MiniMax M2.1 (204K context)
+- `google/gemini-3-pro` - Google's Gemini 3 Pro (1M context)
 - `groq/moonshotai/Kimi-K2-Instruct-0905` - Moonshot AI's Kimi model
-- `zai/GLM-4.6` - Zhipu AI's GLM model
-- `google/gemini-2.5-flash` - Google's Gemini model
-- `minimaxi/MiniMax-M2` - MiniMax's model
 
 For complete list of available models, refer to [Requesty.ai documentation](https://requesty.ai).
 

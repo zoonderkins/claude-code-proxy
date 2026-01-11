@@ -34,7 +34,9 @@ class ClaudeTool(BaseModel):
     input_schema: Dict[str, Any]
 
 class ClaudeThinkingConfig(BaseModel):
-    enabled: bool = True
+    """Extended thinking configuration - 2026 API spec"""
+    type: Literal["enabled", "disabled"] = "enabled"
+    budget_tokens: Optional[int] = None  # Min 1024 when type="enabled"
 
 class ClaudeMessagesRequest(BaseModel):
     model: str
